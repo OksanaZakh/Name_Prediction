@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Name Prediction</string>
     <string name="welcome">Welcome!</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="check_name_string">Please check the name</string>
+    <string name="write_name">Write your name here</string>
 </resources>
