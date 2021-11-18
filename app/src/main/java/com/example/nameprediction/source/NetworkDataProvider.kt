@@ -1,28 +1,29 @@
-package com.example.nameprediction.model
+package com.example.nameprediction.source
 
+import com.example.nameprediction.data.Person
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface RetrofitService {
+interface NetworkDataProvider {
 
     @GET(".")
     suspend fun getPersonData(@Query("name") category: String): Response<Person?>
 
     companion object {
-        var retrofitService: RetrofitService? = null
+        var networkDataProvider: NetworkDataProvider? = null
 
-        fun getInstance(): RetrofitService {
-            if (retrofitService == null) {
+        fun getInstance(): NetworkDataProvider {
+            if (networkDataProvider == null) {
                 val retrofit = Retrofit.Builder()
                     .baseUrl("https://api.agify.io/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
-                retrofitService = retrofit.create(RetrofitService::class.java)
+                networkDataProvider = retrofit.create(NetworkDataProvider::class.java)
             }
-            return retrofitService!!
+            return networkDataProvider!!
         }
     }
 }

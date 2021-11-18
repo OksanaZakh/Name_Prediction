@@ -1,11 +1,8 @@
 package com.example.nameprediction.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.nameprediction.model.Person
-import com.example.nameprediction.model.Repository
+import androidx.lifecycle.*
+import com.example.nameprediction.data.Person
+import com.example.nameprediction.source.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,17 +47,4 @@ class PredictionViewModel(private val repository: Repository) : ViewModel() {
     fun onSnackBarShown() {
         _snackBar.value = null
     }
-
-//    private fun launchDataLoad(block: suspend () -> Unit) {
-//        viewModelScope.launch {
-//            try {
-//                _isLoading.value = true
-//                block()
-//            } catch (exception: Exception) {
-//                _snackBar.value = exception.message
-//            } finally {
-//                _isLoading.value = false
-//            }
-//        }
-//    }
 }

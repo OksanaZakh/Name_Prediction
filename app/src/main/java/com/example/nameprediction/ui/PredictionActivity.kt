@@ -6,8 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.nameprediction.databinding.ActivityPredictionBinding
-import com.example.nameprediction.model.Repository
-import com.example.nameprediction.model.RetrofitService
+import com.example.nameprediction.source.Repository
+import com.example.nameprediction.source.NetworkDataProvider
+import com.example.nameprediction.source.PreferenceProvider
 import com.example.nameprediction.viewmodel.PredictionViewModel
 import com.example.nameprediction.viewmodel.PredictionViewModelFactory
 
@@ -22,8 +23,9 @@ class PredictionActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val retrofitService = RetrofitService.getInstance()
-        val repository = Repository(retrofitService)
+        val preferenceProvider = PreferenceProvider(this)
+        val retrofitService = NetworkDataProvider.getInstance()
+        val repository = Repository(retrofitService, preferenceProvider)
 
         viewModel = ViewModelProvider(this, PredictionViewModelFactory(repository))
             .get(PredictionViewModel::class.java)
