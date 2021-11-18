@@ -1,6 +1,6 @@
 package com.example.nameprediction.source
 
-import com.example.nameprediction.data.Person
+import com.example.nameprediction.data.Prediction
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface NetworkDataProvider {
 
     @GET(".")
-    suspend fun getPersonData(@Query("name") category: String): Response<Person?>
+    suspend fun getPersonData(@Query("name") category: String): Response<Prediction?>
 
     companion object {
         var networkDataProvider: NetworkDataProvider? = null

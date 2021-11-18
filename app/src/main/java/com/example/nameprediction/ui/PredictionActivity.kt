@@ -30,29 +30,45 @@ class PredictionActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, PredictionViewModelFactory(repository))
             .get(PredictionViewModel::class.java)
 
-        viewModel.person.observe(this, {
-            if (it != null) binding.prediction.text = it.toString()
-        })
+        setupListener()
+        setupViewData()
+    }
 
-        viewModel.isLoading.observe(
-            this,
-            {
-                if (it) binding.progressBar.visibility =
-                    View.VISIBLE else binding.progressBar.visibility = View.GONE
+    private fun setupViewData() {
+        with(viewModel) {
+            prediction.observe(this@PredictionActivity, {
+                if (it != null) binding.prediction.text = it.toString()
             })
 
-        viewModel.snackBar.observe(this, {
-            it?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-                viewModel.onSnackBarShown()
-            }
-        })
+            isLoading.observe(
+                this@PredictionActivity,
+                {
+                    val visibility = if (it) View.VISIBLE else View.GONE
+                    binding.progressBar.visibility = visibility
+                    binding.predictButton.isEnabled = !it
+                })
 
+            snackBar.observe(this@PredictionActivity, {
+                it?.let {
+                    Toast.makeText(this@PredictionActivity, it, Toast.LENGTH_LONG).show()
+                    viewModel.onSnackBarShown()
+                }
+            })
+        }
+    }
+
+    private fun setupListener() {
         binding.predictButton.setOnClickListener {
             val userInput = binding.userInput.text?.toString()
             userInput?.let {
-                viewModel.onGetDataButtonClicked(it)
+                viewModel.getDataFromRepo(it)
+                binding.userInput.text = null
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.saveLastName()
     }
 }

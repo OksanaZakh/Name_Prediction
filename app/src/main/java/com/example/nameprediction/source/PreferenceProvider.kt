@@ -5,12 +5,12 @@ import android.content.Context
 class PreferenceProvider(context: Context) {
     private val appContext = context.applicationContext
 
-    suspend fun savePersonNameToPref(name: String) {
+    fun savePersonNameToPref(name: String) {
         appContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE).edit()
             .putString(KEY_NAME, name).apply()
     }
 
-    suspend fun getNameFromPref(): String? {
+    fun getNameFromPref(): String? {
         return appContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
             .getString(KEY_NAME, null)
     }

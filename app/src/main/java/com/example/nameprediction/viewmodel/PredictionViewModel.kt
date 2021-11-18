@@ -1,7 +1,7 @@
 package com.example.nameprediction.viewmodel
 
 import androidx.lifecycle.*
-import com.example.nameprediction.data.Person
+import com.example.nameprediction.data.Prediction
 import com.example.nameprediction.source.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -9,10 +9,10 @@ import kotlinx.coroutines.withContext
 
 class PredictionViewModel(private val repository: Repository) : ViewModel() {
 
-    private val _person = MutableLiveData<Person?>()
+    private val _prediction = MutableLiveData<Prediction?>()
 
-    val person: LiveData<Person?>
-        get() = _person
+    val prediction: LiveData<Prediction?>
+        get() = _prediction
 
     private val _isLoading = MutableLiveData(false)
 
@@ -24,23 +24,26 @@ class PredictionViewModel(private val repository: Repository) : ViewModel() {
     val snackBar: LiveData<String?>
         get() = _snackBar
 
-
-    fun onGetDataButtonClicked(name: String) {
-        getDataFromRepo(name)
-    }
-
-    private fun getDataFromRepo(name: String) {
+    fun getDataFromRepo(name: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            val response = repository.getPerson(name)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    _person.value = response.body()
-                } else {
-                    _snackBar.value = response.message()
-                }
+            val response = withContext(Dispatchers.Default) {
+                repository.getPerson(name)
             }
-            _isLoading.value = false
+            if (response.isSuccessful) {
+                _prediction.value = response.body()
+            } else {
+                _snackBar.value = response.message()
+            }
+        }
+        _isLoading.value = false
+    }
+
+    fun saveLastName() {
+        viewModelScope.launch {
+            prediction.value?.let {
+                repository.saveName(it.name)
+            }
         }
     }
 
