@@ -2,8 +2,7 @@ package com.example.nameprediction.source
 
 import android.content.Context
 
-class PreferenceProvider(context: Context) {
-    private val appContext = context.applicationContext
+class PreferenceProvider(private val appContext: Context) {
 
     fun savePersonNameToPref(name: String) {
         appContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE).edit()

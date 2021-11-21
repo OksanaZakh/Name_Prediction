@@ -1,13 +1,13 @@
 package com.example.nameprediction.source
 
-class Repository(
-    private val networkDataProvider: NetworkDataProvider,
-    private val preferenceProvider: PreferenceProvider
-) {
+import com.example.nameprediction.data.Prediction
+import retrofit2.Response
 
-    suspend fun getPerson(name: String) = networkDataProvider.getPersonData(name)
+interface Repository {
 
-    fun getStoredNameIfAny() = preferenceProvider.getNameFromPref()
+    suspend fun getPerson(name: String): Response<Prediction?>
 
-    fun saveName(name: String) = preferenceProvider.savePersonNameToPref(name)
+    fun getStoredNameIfAny(): String?
+
+    fun saveName(name: String)
 }
